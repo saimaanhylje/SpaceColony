@@ -2,17 +2,17 @@ package com.example.spacecolony;
 
 public class MissionControl {
 
-    // Tracks successful missions to scale the difficulty
-    private static int completedMissions = 0;
-
     // Launches a mission and returns a detailed log of the events
     public static String launchMission(CrewMember cm1, CrewMember cm2) {
         StringBuilder log = new StringBuilder();
 
-        // Generate the dynamic threat using our scaling formula
-        Threat threat = new Threat(completedMissions);
+        // 1. Read the verified threat level directly from your persistent Storage
+        int currentThreatLevel = Storage.getInstance().getCompletedMissions();
+
+        // Generate the dynamic threat using scaling formula
+        Threat threat = new Threat(currentThreatLevel);
         log.append("=== MISSION: ").append(threat.getName()).append(" ===\n");
-        log.append("Threat Level: ").append(completedMissions).append("\n");
+        log.append("Threat Level: ").append(currentThreatLevel).append("\n");
         log.append("Threat Stats -> Power: ").append(threat.act())
                 .append(" | HP: ").append(threat.getMaxEnergy()).append("\n\n");
 
@@ -28,7 +28,7 @@ public class MissionControl {
                 log.append(cm1.getName()).append(" acts! Threat HP: ").append(threat.getEnergy()).append("\n");
 
                 if (!threat.isDefeated()) {
-                    cm1.defend(threat.act()); // Threat retaliates
+                    cm1.defend(threat.act());
                     log.append("Threat retaliates! ").append(cm1.getName()).append(" HP: ").append(cm1.getEnergy()).append("\n");
 
                     if (cm1.getEnergy() <= 0) {
@@ -44,7 +44,7 @@ public class MissionControl {
                 log.append(cm2.getName()).append(" acts! Threat HP: ").append(threat.getEnergy()).append("\n");
 
                 if (!threat.isDefeated()) {
-                    cm2.defend(threat.act()); // Threat retaliates
+                    cm2.defend(threat.act());
                     log.append("Threat retaliates! ").append(cm2.getName()).append(" HP: ").append(cm2.getEnergy()).append("\n");
 
                     if (cm2.getEnergy() <= 0) {
@@ -59,7 +59,8 @@ public class MissionControl {
 
         // --- MISSION RESOLUTION ---
         if (threat.isDefeated()) {
-            completedMissions++; // Ramp up the difficulty for the next launch
+            // 2. Update the difficulty level globally in your persistent storage
+            Storage.getInstance().incrementCompletedMissions();
             log.append("=== MISSION SUCCESS ===\nThe threat was neutralized!\n");
 
             // Process survivors: Award XP, move to Quarters, restore energy
@@ -76,7 +77,7 @@ public class MissionControl {
                 log.append(cm2.getName()).append(" gained 3 XP and returned to Quarters.\n");
             }
         } else {
-            log.append("=== MISSION FAILED ===\nAll assigned crew members were lost.\n");
+            log.append("=== MISSION FAILED ===\nAll assigned crew members were lost...\n");
         }
 
         return log.toString();

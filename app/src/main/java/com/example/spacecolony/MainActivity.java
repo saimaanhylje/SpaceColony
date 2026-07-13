@@ -64,16 +64,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void resetApp(View view) {
-        // 1. Delete the physical save file from the device
+        // 1. Delete the physical save file from the device disk
         boolean deleted = deleteFile("colony_data.ser");
 
         if (deleted) {
-            // 2. Clear out the active runtime memory map inside Storage
-            Storage.getInstance().getAllCrew().clear();
-
-            // 3. Force the storage singleton to completely recreate a fresh empty map
-            //call loadFromFile because its exception block resets it to a blank HashMap
-            Storage.getInstance().loadFromFile(this);
+            // 2. Cleanly reset both the crew map and the mission counter to 0 in memory
+            Storage.getInstance().resetStorage();
 
             Toast.makeText(this, "Colony data wiped successfully!", Toast.LENGTH_SHORT).show();
         } else {
