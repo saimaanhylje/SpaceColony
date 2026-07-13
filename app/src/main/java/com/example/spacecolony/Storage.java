@@ -11,7 +11,7 @@ public class Storage implements Serializable {
 
     private static final String FILE_NAME = "colony_data.ser";
 
-    // HashMap to seamlessly connect integer IDs to objects
+    // HashMap to connect integer IDs to objects
     private HashMap<Integer, CrewMember> crewMap;
 
     // Starting completed missions at 0
@@ -39,19 +39,11 @@ public class Storage implements Serializable {
         return crewMap.get(id);
     }
 
-    public void removeCrewMember(int id) {
-        crewMap.remove(id);
-    }
-
     // RESTORED: Needed by MissionControl for permadeath object removal
     public void removeCrewMember(CrewMember cm) {
         if (cm != null) {
             crewMap.remove(cm.getId());
         }
-    }
-
-    public ArrayList<CrewMember> getAllCrew() {
-        return new ArrayList<>(crewMap.values());
     }
 
     public int getCompletedMissions() {

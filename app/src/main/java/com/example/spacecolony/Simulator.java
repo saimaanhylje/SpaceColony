@@ -11,7 +11,7 @@ public class Simulator {
             cm.gainExperience(2); // Awards 2 XP per session
             return cm.getName() + " completed training! (+2 XP, -5 Energy)";
         } else {
-            return cm.getName() + " is too exhausted to train. Send them to Quarters!";
+            return cm.getName() + " is too exhausted to train.";
         }
     }
 

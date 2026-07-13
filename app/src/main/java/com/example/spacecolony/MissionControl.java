@@ -59,11 +59,11 @@ public class MissionControl {
 
         // --- MISSION RESOLUTION ---
         if (threat.isDefeated()) {
-            // 2. Update the difficulty level globally in your persistent storage
+            // 2. Update the difficulty level globally in persistent storage
             Storage.getInstance().incrementCompletedMissions();
             log.append("=== MISSION SUCCESS ===\nThe threat was neutralized!\n");
 
-            // Process survivors: Award XP, move to Quarters, restore energy
+            // survivors: Award XP, move to Quarters, restore energy
             if (cm1.getEnergy() > 0) {
                 cm1.gainExperience(3);
                 cm1.setLocation("Quarters");

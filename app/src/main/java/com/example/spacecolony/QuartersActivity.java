@@ -91,7 +91,7 @@ public class QuartersActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
-    // This ensures the list updates automatically if user navigates away and come back
+    // ensures the list updates automatically if user navigates away and come back
     @Override
     protected void onResume() {
         super.onResume();
